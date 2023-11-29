@@ -15,6 +15,7 @@ pub fn run(repo_path: &Path) -> Result<(), Box<dyn Error>> {
     revwalk.set_sorting(git2::Sort::TIME)?;
 
     for oid in revwalk {
+        todo!();
         let commit = repo.find_commit(oid?)?;
         let author = commit.author();
 
@@ -41,6 +42,6 @@ pub fn run(repo_path: &Path) -> Result<(), Box<dyn Error>> {
 }
 
 fn datetime(git_time: Time) {
-    let naive_datetime = NaiveDateTime::from_timestamp(git_time.seconds(), 0);
-    let datetime: DateTime<Utc> = DateTime::from_utc(naive_datetime, Utc);
+    let naive_datetime = NaiveDateTime::from_timestamp_opt(git_time.seconds(), 0).unwrap();
+    let datetime: DateTime<Utc> = DateTime::from_naive_utc_and_offset(naive_datetime, Utc);
 }
